@@ -1,0 +1,14 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net7.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\WealthCompany.Core\WealthCompany.Core.csproj" />
+    <ProjectReference Include="..\WealthCompany.Service\WealthCompany.Service.csproj" />
+  </ItemGroup>
+
+</Project>
