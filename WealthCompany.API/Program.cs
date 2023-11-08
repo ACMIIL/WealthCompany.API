@@ -1,17 +1,25 @@
+using Microsoft.Extensions.Configuration;
 using Microsoft.OpenApi.Models;
 using System.Data.SqlClient;
 using WealthCompany.API.Configuration;
+using WealthCompany.Core.Configurations;
+using static Dapper.SqlMapper;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-
+//builder.Services.AddWealthCompanyServices();
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 builder.Services.AddTransient<WealthCompany.Data.Classes.IConnection>((sp) => new WealthCompany.Data.Classes.AcmCompareConnection(new SqlConnection(builder.Configuration.GetConnectionString("AcmCompare"))));
+builder.Services.AddTransient<WealthCompany.Data.Classes.IConnection>((sp) => new WealthCompany.Data.Classes.TWCConnection(new SqlConnection(builder.Configuration.GetConnectionString("DBUATTWC"))));
+//builder.Services.Configure<AppSettings>(Configuration.GetSection("ChhotaNiveshAppSettings"));
+builder.Configuration.GetSection("SendSMS").Get<SendSMS>();
+//services.Configure<AppSettings>(Configuration.GetSection("AppSettings"));
+builder.Services.Configure<AppSettings>(builder.Configuration.GetSection("AppSettings"));
 
 // configure strongly typed settings object
 builder.Services.AddOptions();
