@@ -18,5 +18,9 @@ namespace WealthCompany.Core.Model
     {
         public string MobileNo { get; set; }
         public bool UserFound { get; set; }
+        public string FoundMobile { get; set; }
+
+
+        
     }
 }

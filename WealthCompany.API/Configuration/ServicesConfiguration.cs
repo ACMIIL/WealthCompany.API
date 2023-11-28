@@ -22,6 +22,12 @@ namespace WealthCompany.API.Configuration
             services.AddScoped<ISendMessageHelper, SendMessageHelper>();
 
 
+            services.AddScoped<IPMSandAIFManager, PMSandAIFManager>();
+            services.AddScoped<IPMSandAIFService, PMSandAIFService>();
+            services.AddScoped<IPMSandAIFRepository, PMSandAIFRepository>();
+            services.AddScoped<ISendMessageHelper, SendMessageHelper>();
+
+
             // Add other services as needed
 
             // You can also add other service registrations here

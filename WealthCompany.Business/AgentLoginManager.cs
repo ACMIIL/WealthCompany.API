@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using WealthCompany.Business.Helper;
 using WealthCompany.Core.Common;
 using WealthCompany.Core.Model;
+using WealthCompany.Core.Model.MF_AIFLeadGenrationModel;
 using WealthCompany.Service;
 using static WealthCompany.Core.Model.AgentLoginModel;
 
@@ -77,6 +78,8 @@ namespace WealthCompany.Business
         {
             return await _agentLoginservice.CheckUser(MobileNo);
         }
+
+      
 
 
 
