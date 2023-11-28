@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using WealthCompany.Core.Configurations;
 using WealthCompany.Core.Model;
+using WealthCompany.Core.Model.MF_AIFLeadGenrationModel;
 using static WealthCompany.Core.Model.AgentLoginModel;
 
 namespace WealthCompany.Data.Repository
@@ -53,25 +54,29 @@ namespace WealthCompany.Data.Repository
             var dp = new DynamicParameters();
             dp.Add("@Mobile", MobileNo);
             dp.Add("@UserFound", dbType: DbType.Boolean, direction: ParameterDirection.Output);
+            dp.Add("@FoundMobile", dbType: DbType.String, size: 12, direction: ParameterDirection.Output);
 
             await _DBUATTWC.ExecuteAsync(
                 sql: StoredProcedure.USP_CheckUserByMobile,
                 param: dp,
                 commandType: CommandType.StoredProcedure);
 
-            // Get the value of @UserFound from the output parameter
+            // Get the values of @UserFound and @FoundMobile from the output parameters
             bool userFound = dp.Get<bool>("@UserFound");
+            string foundMobile = dp.Get<string>("@FoundMobile");
 
             // Create a CheckUserModel based on the result
             CheckUserModel result = new CheckUserModel
             {
-                UserFound = userFound
+                UserFound = userFound,
+                FoundMobile = foundMobile
             };
 
             return result;
         }
 
-       
+
+
 
         public async Task<string> VerifyOTP(OTPVerifyModel oTPVerifyModel)
         {         
@@ -87,7 +92,7 @@ namespace WealthCompany.Data.Repository
                 return result;
             
         }
-
+        
 
         #endregion
 

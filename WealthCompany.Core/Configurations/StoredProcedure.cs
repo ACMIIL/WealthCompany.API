@@ -12,6 +12,8 @@ namespace WealthCompany.Core.Configurations
         public const string USP_UpdateOTP = "USP_UpdateOTP";
         public const string USP_CheckUserByMobile = "USP_CheckUserByMobile";
         public const string VerifyOTP = "VerifyOTP";
+        public const string InsertInvestor = "InsertInvestor";
+
 
 
 

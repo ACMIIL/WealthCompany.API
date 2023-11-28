@@ -11,11 +11,15 @@ namespace WealthCompany.Data
     {
         #region Global Variables
         public IAgentLoginRepository AgentLogin { get; }
+        public IPMSandAIFRepository PMSandAIF { get; }
         #endregion
 
-        public UnitOfWork(IAgentLoginRepository agentLoginRepository)
+        public UnitOfWork(IAgentLoginRepository agentLoginRepository,
+
+           IPMSandAIFRepository pMSandAIFRepository )
         {
-            AgentLogin = agentLoginRepository;  
+            AgentLogin = agentLoginRepository;
+            PMSandAIF = pMSandAIFRepository;    
         }
         
 

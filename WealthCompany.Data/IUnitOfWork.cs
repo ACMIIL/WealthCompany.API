@@ -10,5 +10,6 @@ namespace WealthCompany.Data
     public interface IUnitOfWork
     {
         IAgentLoginRepository AgentLogin { get; }
+        IPMSandAIFRepository PMSandAIF { get; }
     }
 }

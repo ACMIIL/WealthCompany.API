@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using WealthCompany.Core.Model;
+
 using WealthCompany.Data;
 using static WealthCompany.Core.Model.AgentLoginModel;
 
@@ -42,6 +43,7 @@ namespace WealthCompany.Service
             return await _unitOfWork.AgentLogin.VerifyOTP(oTPVerifyModel);
         }
 
+       
 
         #endregion
 
