@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
 using WealthCompany.Business;
@@ -7,6 +8,7 @@ using static WealthCompany.Core.Model.AgentLoginModel;
 
 namespace WealthCompany.API.Controllers
 {
+    
     [Route("api/[controller]")]
     [ApiController]
     public class AgentLoginController : ControllerBase
@@ -38,16 +40,45 @@ namespace WealthCompany.API.Controllers
         {
             try
             {
-                var GetDetails = await _agentLoginManager.UpdateOtp(Mobile);
+                var updateResult = await _agentLoginManager.UpdateOtp(Mobile);
 
-                _logger.LogInformation("UsersDetailsController -- GetUsersDetails");
-
-                return new ResultModel()
+                if (updateResult == "OTP_SENT_SUCCESSFULLY")
                 {
-                    Code = HttpStatusCode.OK,
-                    //Message = Messages.SegmentAdditionSLBM,
-                    Data = GetDetails
-                };
+                    return new ResultModel()
+                    {
+                        Code = HttpStatusCode.OK,
+                        Message = "OTP sent successfully.",
+                        Data = null
+                    };
+                }
+                else if (updateResult == "USER_NOT_FOUND")
+                {
+                    return new ResultModel()
+                    {
+                        Code = HttpStatusCode.NotFound,
+                        Message = "User not found.",
+                        Data = null
+                    };
+                }
+                else if (updateResult == "FAILED_TO_UPDATE_OTP")
+                {
+                    return new ResultModel()
+                    {
+                        Code = HttpStatusCode.BadRequest,
+                        Message = "Failed to update OTP.",
+                        Data = null
+                    };
+                }
+                else
+                {
+                    // Handle other cases if needed
+                    return new ResultModel()
+                    {
+                        Code = HttpStatusCode.BadRequest,
+                        Message = "Unexpected error occurred.",
+                        Data = null
+                    };
+                }
             }
             catch (Exception ex)
             {
@@ -57,10 +88,11 @@ namespace WealthCompany.API.Controllers
                 {
                     Code = HttpStatusCode.InternalServerError,
                     Message = ex.Message,
-                    Data = ""
+                    Data = null
                 };
             }
         }
+
 
         [HttpPost("CheckUser")]
         public async Task<ResultModel> CheckUser(string MobileNo)

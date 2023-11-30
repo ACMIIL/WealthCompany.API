@@ -42,10 +42,11 @@ namespace WealthCompany.Data.Repository
             dp.Add("@Mobile", Mobile);
             dp.Add("@MobileOTP", newOTP);
             //dp.Add("@MobileOTPGeneratedDate", oTP.MobileOTPGeneratedDate.ToString("MM/dd/yyyy HH:mm:ss"));
-            return await _DBUATTWC.ExecuteScalarAsync<string>(
+            var result = await _DBUATTWC.ExecuteScalarAsync<string>(
                     sql: StoredProcedure.USP_UpdateOTP,
                     param: dp,
                     commandType: CommandType.StoredProcedure);
+            return result;
         }
 
 

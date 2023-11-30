@@ -38,22 +38,31 @@ namespace WealthCompany.Business
 
             string newOTP = GenerateOTP();
 
-            // Send Message for OTP
-            string otpMessage = StaticValues.OTPMessage.Replace("#OTP#", newOTP);
-
             // Send Physical Message on Mobile
-            await SentOtpMobile(newOTP, Mobile);
+            bool isOtpSentSuccessfully = await SentOtpMobile(newOTP, Mobile);
 
             if (checkUserResult.UserFound)
             {
-                return await _agentLoginservice.UpdateOtp(Mobile, newOTP);
+                string updateResult = await _agentLoginservice.UpdateOtp(Mobile, newOTP);
+
+                if (isOtpSentSuccessfully && updateResult== "OTP_UPDATED_SUCCESSFULLY")
+                {
+                    return "OTP_SENT_SUCCESSFULLY";
+                }
+                else
+                {
+                    // Log or debug information about the null updateResult
+                    Console.WriteLine("updateResult is null or empty");
+                    return "FAILED_TO_UPDATE_OTP";
+                }
             }
             else
             {
                 // User not found, return a message
-                return "User not found.";
+                return "USER_NOT_FOUND";
             }
         }
+
 
         public async Task<string> VerifyOTP(OTPVerifyModel oTPVerifyModel)
         {
@@ -75,32 +84,31 @@ namespace WealthCompany.Business
             return await _agentLoginservice.CheckUser(MobileNo);
         }
 
-        public async Task SentOtpMobile(string newOTP, string Mobile)
+        public async Task<bool> SentOtpMobile(string newOTP, string Mobile)
         {
             try
             {
-                string OTPMsg = newOTP + " is your OTP. This OTP can be used only once. - www.Investmentz.com";
+                string OTPMsg = $"{newOTP} is your OTP. This OTP can be used only once. - www.Investmentz.com";
 
-                
-                
-                    using (var client = new System.Net.WebClient())
-                    {
-                        client.Headers.Add("Content-Type:application/json");
-                        client.Headers.Add("Accept:application/json");
-
-                    // Adjust the following URL according to your SMS gateway documentation
+                using (var client = new System.Net.WebClient())
+                {
+                    client.Headers.Add("Content-Type:application/json");
+                    client.Headers.Add("Accept:application/json");
                     var result = client.DownloadString("https://push3.maccesssmspush.com/servlet/com.aclwireless.pushconnectivity.listeners.TextListener?userId=acmiil&pass=acmiil&appid=acmiil&subappid=acmiil&contenttype=1&to=" + Mobile + "&from=ACMIIL&text=" + OTPMsg + "&selfid=true&alert=1&dlrreq=true");
 
-                   // You may want to handle the result or check for success based on your SMS gateway response
-                    }
-
+                    // Assuming the OTP is sent successfully, return true
+                    return true;
+                }
             }
             catch (Exception ex)
             {
                 // Log the exception for troubleshooting
                 Console.WriteLine($"Error in SentOtpMobile: {ex}");
+                // OTP sending failed, return false
+                return false;
             }
         }
+
 
 
 

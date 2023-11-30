@@ -1,6 +1,9 @@
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.Extensions.Configuration;
+using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using System.Data.SqlClient;
+using System.Text;
 using WealthCompany.API.Configuration;
 using WealthCompany.Core.Configurations;
 using static Dapper.SqlMapper;
@@ -35,24 +38,51 @@ builder.Services.AddWealthCompanyServices();
 
 builder.Services.AddMemoryCache();
 builder.Services.AddLazyCache();
+builder.Services.AddMemoryCache();
+builder.Services.AddLazyCache();
+
+builder.Services.AddAuthentication(options =>
+{
+    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+}).AddJwtBearer(options =>
+{
+
+    var key = Encoding.ASCII.GetBytes(builder.Configuration["Jwt:Secret"]);
+
+    options.RequireHttpsMetadata = false;
+    options.SaveToken = true;
+    options.TokenValidationParameters = new TokenValidationParameters
+    {
+        ValidateIssuerSigningKey = true,
+        IssuerSigningKey = new SymmetricSecurityKey(key),
+        ValidateIssuer = false,
+        ValidateAudience = false
+    };
+});
 
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
-{
-    app.UseSwagger();
-    app.UseSwaggerUI();
-}
+//if (app.Environment.IsDevelopment())
+//{
+//    app.UseSwagger();
+//    app.UseSwaggerUI();
+//}
+app.UseSwagger();
+app.UseSwaggerUI();
+
 app.UseCors(builder => builder
 .AllowAnyHeader()
 .AllowAnyMethod()
 .SetIsOriginAllowed((host) => true)
 .AllowCredentials());
 
+
 app.UseHttpsRedirection();
 
 app.UseAuthorization();
+//app.UseMiddleware<JwtMiddleware>();
 
 app.MapControllers();
 
