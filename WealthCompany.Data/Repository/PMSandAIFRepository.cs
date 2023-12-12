@@ -35,19 +35,24 @@ namespace WealthCompany.Data.Repository
         public async Task<string> InsertMF_AIF_Lead(MF_AIFModel mF_AIFModel)
         {
             var dp = new DynamicParameters();
+            dp.Add("@Fund_Name", mF_AIFModel.Fund_Name);
             dp.Add("@Full_Name", mF_AIFModel.Full_Name);
             dp.Add("@Min_Investment", mF_AIFModel.Min_Investment);
-            dp.Add("@@Mobile_Number", mF_AIFModel.Mobile_No);
+            dp.Add("@Mobile_Number", mF_AIFModel.Mobile_No); // Removed extra '@' symbol
             dp.Add("@Email_ID", mF_AIFModel.Email_ID);
+            dp.Add("@ResultMessage", "", DbType.String, ParameterDirection.Output, size: 255); // Corrected the parameter direction and added size
 
-                return  await _DBUATTWC.QueryFirstOrDefaultAsync<string>(
+            await _DBUATTWC.ExecuteAsync(
                 sql: StoredProcedure.InsertInvestor, // Stored procedure name
                 param: dp,
                 commandType: CommandType.StoredProcedure);
 
-            
+            // Retrieve the output parameter value
+            var resultMessage = dp.Get<string>("@ResultMessage");
 
+            return resultMessage;
         }
+
 
         #endregion
     }

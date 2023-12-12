@@ -13,6 +13,14 @@ namespace WealthCompany.Core.Configurations
         public const string USP_CheckUserByMobile = "USP_CheckUserByMobile";
         public const string VerifyOTP = "VerifyOTP";
         public const string InsertInvestor = "InsertInvestor";
+        public const string UserEmandateTranscationInsertUpdate = "UserEmandateTranscationInsertUpdate";
+        public const string GetUserEmandateStatus = "GetUserEmandateStatus";
+        public const string CheckBankDebitcardEligibility = "CheckBankDebitcardEligibility";
+
+        
+
+
+
 
 
 

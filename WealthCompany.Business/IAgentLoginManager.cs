@@ -18,7 +18,7 @@ namespace WealthCompany.Business
         //Task VerifyMobileNumber(string mobileNumber);
         Task<CheckUserModel> CheckUser(string MobileNo);
         Task<string> VerifyOTP(OTPVerifyModel oTPVerifyModel);
-      
+
 
 
 

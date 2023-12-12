@@ -8,10 +8,14 @@ namespace WealthCompany.Core.Model.MF_AIFLeadGenrationModel
 {
     public class MF_AIFModel
     {
+        public string Fund_Name { get; set; }
         public string Full_Name { get; set; }
         public string Min_Investment { get; set; }
         public string Mobile_No { get; set; }
         public string Email_ID { get; set; }
-        
+     
+
+       
+
     }
 }

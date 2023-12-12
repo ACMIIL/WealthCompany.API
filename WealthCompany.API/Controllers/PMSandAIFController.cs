@@ -30,7 +30,7 @@ namespace WealthCompany.API.Controllers
         }
         #endregion
         #region Methods
-        [HttpPost("InsertPMS&AIFLeads")]
+        [HttpPost("InsertPMSAIFLeads")]
         public async Task<ResultModel> InsertMF_AIF_Lead(MF_AIFModel mF_AIFModel)
         {
             try
